@@ -3,6 +3,10 @@ library/out/
 library/*.iml
 library/.idea/
 library/ant.properties
+library/build.xml
+library/local.properties
+library/proguard-project.txt
+library/project.properties
 
 
 example/gen/
