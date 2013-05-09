@@ -1,7 +1,9 @@
-brary/gen/
+library/gen/
 library/out/
-library/LinkDroid.iml
+library/*.iml
 library/.idea/
+library/ant.properties
+
 
 example/gen/
 example/out/
