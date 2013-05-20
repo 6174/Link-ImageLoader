@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import cn.link.imageloader.DisplayOptions;
 import cn.link.imageloader.decode.ImageDecoder;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -14,4 +15,6 @@ public interface DiscCacheAware {
             throws IOException;
 
     void clear();
+
+    File getCacheDir();
 }

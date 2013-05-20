@@ -35,6 +35,7 @@ public final class ConfigOptions {
     final DisplayOptions mDefaultDisplayImageOptions;
     final boolean isloggingEnabled;
 
+    public final FileNameGenerator mFileNameGenerator;
 
     private ConfigOptions(final Builder builder) {
         mContext = builder.mContent;
@@ -42,6 +43,7 @@ public final class ConfigOptions {
         mMemoryCache = builder.mMemoryCache;
         mDownloader = builder.mDownloader;
         mDecoder = builder.mDecoder;
+        mFileNameGenerator = builder.mDiscCacheFileNameGenerator;
         mDefaultDisplayImageOptions = builder.mDefaultDisplayImageOptions;
         mReserveDiscCache = DefaultConfigurationFactory.createReserveDiscCache(mContext);
         isloggingEnabled = builder.isLoggingEnabled;
@@ -57,6 +59,7 @@ public final class ConfigOptions {
         private DiscCacheAware mDiscCache;
         private FileNameGenerator mDiscCacheFileNameGenerator;
         private ImageDownloader mDownloader;
+        private FileNameGenerator mFileNameGenerator;
         private DisplayOptions mDefaultDisplayImageOptions;
 
         private boolean isLoggingEnabled = false;
@@ -84,6 +87,11 @@ public final class ConfigOptions {
 
         public Builder decoder(ImageDecoder decoder) {
             this.mDecoder = decoder;
+            return this;
+        }
+
+        public Builder fileNameGenerator(FileNameGenerator generator) {
+            this.mFileNameGenerator = generator;
             return this;
         }
 
@@ -116,6 +124,11 @@ public final class ConfigOptions {
             if (mDownloader == null) {
                 mDownloader = DefaultConfigurationFactory.createImageDownloader(mContent);
             }
+
+            if (mFileNameGenerator == null) {
+                mFileNameGenerator = DefaultConfigurationFactory.createFileNameGenerator();
+            }
+
             if (mDefaultDisplayImageOptions == null) {
                 mDefaultDisplayImageOptions = DisplayOptions.createSimple();
             }

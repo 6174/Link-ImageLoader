@@ -105,13 +105,18 @@ public class BaseImageDownloader implements ImageDownloader {
      * @throws java.io.IOException if some I/O error occurs during network request or if no InputStream could be created for
      *                             URI.
      */
-    protected InputStream getStreamFromNetwork(String imageUri, Object extra) throws IOException {
+    protected InputStream getStreamFromNetwork(String imageUri, DisplayOptions options) throws IOException {
         HttpURLConnection conn = connectTo(imageUri);
         int redirectCount = 0;
         while (conn.getResponseCode() / 100 == 3 && redirectCount < MAX_REDIRECT_COUNT) {
             conn = connectTo(conn.getHeaderField("Location"));
             redirectCount++;
         }
+        if (options.getProgressListener() != null) {
+            int total = conn.getContentLength();
+            options.getProgressListener().onStart(total);
+        }
+
         return new BufferedInputStream(conn.getInputStream(), BUFFER_SIZE);
     }
 
@@ -121,6 +126,7 @@ public class BaseImageDownloader implements ImageDownloader {
         conn.setConnectTimeout(connectTimeout);
         conn.setReadTimeout(readTimeout);
         conn.connect();
+
         return conn;
     }
 

@@ -15,25 +15,26 @@
  *******************************************************************************/
 package cn.link.imageloader;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory.Options;
 import cn.link.imageloader.assist.ImageScaleType;
 import cn.link.imageloader.assist.ImageSize;
+import cn.link.imageloader.display.OnLoadingListener;
 import cn.link.imageloader.assist.ViewScaleType;
 import cn.link.imageloader.display.BitmapDisplayer;
 import cn.link.imageloader.display.BitmapProgressListener;
 
 public final class DisplayOptions {
+    public String mDisplayUrl;
     private final int mResetImage;
     private final boolean mIfCacheInMemory;
     private final boolean mIfCacheOnDisc;
-    private final boolean mDispalyIfInMemory;
+    private final boolean showPressEffect;
 
     private final ImageScaleType mImageScaleType;
+
     private final BitmapDisplayer mDisplayer;
 
-    private final BitmapProgressListener mProgressListener;
-    public String mDisplayUrl;
+    private BitmapProgressListener mProgressListener;
+    private OnLoadingListener mOnLoadingListener;
 
     public ImageSize mTargetSize;
     public ViewScaleType mViewScalType;
@@ -42,16 +43,18 @@ public final class DisplayOptions {
         mResetImage = builder.mResetImage;
         mIfCacheInMemory = builder.mIfCacheInMemory;
         mIfCacheOnDisc = builder.mIfCacheOnDisc;
+        showPressEffect = builder.showPressEffect;
         mImageScaleType = builder.mImageScaleType;
         mDisplayer = builder.mDisplay;
-        mProgressListener = builder.mProgressListener;
-        mDispalyIfInMemory = builder.mDispalyIfInMemory;
         mDisplayUrl = builder.mDisplayUrl;
         mTargetSize = builder.mTargetSize;
         mViewScalType = builder.mViewScaleType;
     }
 
     public int getResetImage() {
+        if (mResetImage == 0) {
+            return R.drawable.transparent;
+        }
         return mResetImage;
     }
 
@@ -63,6 +66,10 @@ public final class DisplayOptions {
         return mIfCacheOnDisc;
     }
 
+    public boolean isShowPressEffect() {
+        return showPressEffect;
+    }
+
     public ImageScaleType getImageScaleType() {
         return mImageScaleType;
     }
@@ -72,12 +79,20 @@ public final class DisplayOptions {
         return mDisplayer;
     }
 
+    public void setProgressListener(BitmapProgressListener listener) {
+        this.mProgressListener = listener;
+    }
+
     public BitmapProgressListener getProgressListener() {
         return mProgressListener;
     }
 
-    public boolean isDispalyIfInMemory() {
-        return mDispalyIfInMemory;
+    public void setOnLoadingListener(OnLoadingListener ls) {
+        this.mOnLoadingListener = ls;
+    }
+
+    public OnLoadingListener getOnLoadingListener() {
+        return mOnLoadingListener;
     }
 
     public String getDisplayUrl() {
@@ -90,6 +105,7 @@ public final class DisplayOptions {
         private boolean mIfCacheInMemory = true;
         private boolean mIfCacheOnDisc = true;
         private boolean mDispalyIfInMemory = true;
+        private boolean showPressEffect = true;
         private ImageScaleType mImageScaleType = ImageScaleType.IN_SAMPLE_INT;
         private BitmapDisplayer mDisplay = DefaultConfigurationFactory.createBitmapDisplayer();
         private BitmapProgressListener mProgressListener;
@@ -114,6 +130,11 @@ public final class DisplayOptions {
 
         public Builder disableCacheOnDisc() {
             mIfCacheOnDisc = false;
+            return this;
+        }
+
+        public Builder disablePressEffect() {
+            showPressEffect = false;
             return this;
         }
 
@@ -152,7 +173,6 @@ public final class DisplayOptions {
             mImageScaleType = options.mImageScaleType;
             mDisplay = options.mDisplayer;
             mProgressListener = options.mProgressListener;
-            mDispalyIfInMemory = options.mDispalyIfInMemory;
             mDisplayUrl = options.mDisplayUrl;
             return this;
         }

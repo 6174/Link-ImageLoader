@@ -13,10 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package cn.link.imageloader.assist;
-
-import android.graphics.Bitmap;
-import android.view.View;
+package cn.link.imageloader.display;
 
 /**
  * A convenient class to extend when you only want to listen for a subset of all the image loading events. This
@@ -25,24 +22,20 @@ import android.view.View;
  * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
  * @since 1.4.0
  */
-public class SimpleImageLoadingListener implements ImageLoadingListener {
+public class SimpleImageLoadingListener implements OnLoadingListener {
+
     @Override
-    public void onLoadingStarted(String imageUri, View view) {
-        // Empty implementation
+    public void onStart() {
+        //ToDo
     }
 
     @Override
-    public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-        // Empty implementation
+    public void onFailed(Exception e) {
+        //ToDo
     }
 
     @Override
-    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-        // Empty implementation
-    }
-
-    @Override
-    public void onLoadingCancelled(String imageUri, View view) {
-        // Empty implementation
+    public void onComplete() {
+        //ToDo
     }
 }

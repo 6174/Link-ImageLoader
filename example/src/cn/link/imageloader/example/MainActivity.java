@@ -1,17 +1,23 @@
-package cn.link.imageloader;
+package cn.link.imageloader.example;
 
 import android.app.Activity;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import cn.link.imageloader.ConfigOptions;
+import cn.link.imageloader.DisplayOptions;
+import cn.link.imageloader.ImageLoaderEngine;
+import cn.link.imageloader.LKImageView;
+import cn.link.imageloader.display.RoundedBitmapDisplayer;
 
-public class MyActivity extends Activity {
+public class MainActivity extends Activity {
     /**
      * Called when the activity is first created.
      */
+
 
     LKImageView mImageView;
     ListView mListView;
@@ -20,7 +26,8 @@ public class MyActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        ConfigOptions options = new ConfigOptions.Builder(this).build();
+        ConfigOptions options = new ConfigOptions.Builder(this)
+                .build();
 
         ImageLoaderEngine.init(options);
 
@@ -28,6 +35,8 @@ public class MyActivity extends Activity {
         mListView = (ListView) findViewById(R.id.listview);
 
         mListView.setAdapter(new ImageAdapter());
+
+
     }
 
     class ImageAdapter extends BaseAdapter {
@@ -36,7 +45,12 @@ public class MyActivity extends Activity {
 
         ImageAdapter() {
             mDisplayOptions = new DisplayOptions.Builder()
-                    .setResetImage(getResources().getColor(R.color.zfz))
+                    .setResetImage(R.drawable.transparent)
+//                    .disablePressEffect()
+//                    .disableCacheInMemory()
+//                    .disableCacheOnDisc()
+//                    .setDisplayer(new FadeInBitmapDisplayer(200))
+                    .setDisplayer(new RoundedBitmapDisplayer(10))
                     .build();
         }
 
@@ -57,6 +71,7 @@ public class MyActivity extends Activity {
 
         class Holder {
             LKImageView mImageView;
+            ProgressBar mPro;
         }
 
         @Override
@@ -66,12 +81,13 @@ public class MyActivity extends Activity {
                 view = View.inflate(getApplicationContext(), R.layout.cell, null);
                 Holder holder = new Holder();
                 holder.mImageView = (LKImageView) view.findViewById(R.id.img);
+                holder.mPro = (ProgressBar) view.findViewById(R.id.pro);
                 view.setTag(holder);
             } else {
                 view = convertView;
             }
 
-            Holder holder = (Holder) view.getTag();
+            final Holder holder = (Holder) view.getTag();
             mDisplayOptions.mDisplayUrl = sUrls[position];
             holder.mImageView.setDisplayOptions(mDisplayOptions);
             holder.mImageView.display();
@@ -101,5 +117,6 @@ public class MyActivity extends Activity {
             "http://photo.yupoo.com/strongwillow/AyGPWlEq/medish.jpg",
             "http://photo.yupoo.com/strongwillow/AyGPWcaZ/medish.jpg",
             "http://photo.yupoo.com/strongwillow/AyGPVBa4/medish.jpg"
+
     };
 }
