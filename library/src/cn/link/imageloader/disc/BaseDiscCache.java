@@ -63,7 +63,7 @@ public class BaseDiscCache implements DiscCacheAware {
             int len = 0;
             int sum = 0;
             while ((len = input.read(buf1)) != -1) {
-                if (options != null) {
+                if (options.ifCacheOnDisc()) {
                     fout.write(buf1, 0, len);
                 }
                 output.write(buf1, 0, len);
@@ -73,7 +73,7 @@ public class BaseDiscCache implements DiscCacheAware {
                     options.getProgressListener().onProgress(sum);
                 }
             }
-            if (options != null) {
+            if (options.ifCacheOnDisc()) {
                 fout.flush();
             }
             fout.close();
